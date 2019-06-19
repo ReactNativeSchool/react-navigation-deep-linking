@@ -1,8 +1,10 @@
+import React from "react";
 import {
   createAppContainer,
   createStackNavigator,
   createSwitchNavigator
 } from "react-navigation";
+import { Linking } from "expo";
 
 import Initializing from "./screens/Initializing";
 import List from "./screens/List";
@@ -13,19 +15,30 @@ const MainApp = createStackNavigator({
     screen: List,
     navigationOptions: {
       headerTitle: "People"
-    }
+    },
+    path: "list"
   },
   Details: {
     screen: Details,
     navigationOptions: {
       headerTitle: "Details"
-    }
+    },
+    path: "details/:personId"
   }
 });
 
 const App = createSwitchNavigator({
   Initializing,
-  MainApp
+  MainApp: {
+    screen: MainApp,
+    path: ""
+  }
 });
 
-export default createAppContainer(App);
+const AppContainer = createAppContainer(App);
+
+export default () => {
+  const prefix = Linking.makeUrl("/");
+  console.log(prefix);
+  return <AppContainer uriPrefix={prefix} />;
+};
